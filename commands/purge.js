@@ -2,6 +2,7 @@ module.exports = {
     name: 'purge',
     usage: '[Amount (default = 5)]',
     userPerms: 'MANAGE_MESSAGES',
+    botPerms: 'MANAGE_MESSAGES',
     async execute({ message, args, handler, client }) {
         let toPurge
         if (!args[0]) {

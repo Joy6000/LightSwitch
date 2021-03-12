@@ -1,5 +1,3 @@
-const { execute } = require("./purge");
-
 module.exports = {
     name: 'kick',
     reqArgs: 1,
