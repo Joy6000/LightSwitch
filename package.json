@@ -1,0 +1,24 @@
+{
+  "name": "LightSwitch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "module-alias": "^2.2.2",
+    "nodemon": "^2.0.7",
+    "zoro-utils": "^3.7.4"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@util": "./util",
+    "@schemas": "./schemas"
+  }
+}
