@@ -1,7 +1,7 @@
 # Heyo!
 I'm LightSwitch, a lightweight bot that is in production.
 # Description
-Lightweight bot that will cover all your needs by the time it is complete.
+This is a private/public bot. There will be no invite, you must get this bot up and ready for your server. When this bot is complete, you'll get instructions.
 # FAQ
 #### When will this be ready? 
 I'm currently working on a project for a friend, (please check her out she's really cool https://www.youtube.com/channel/UCX6cIovME8Ts7OEGkLC558w) 
