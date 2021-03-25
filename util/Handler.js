@@ -9,7 +9,9 @@ class Handler {
         if (!options.commandsDir) console.warn('No specified commands dir. Defaulting to ./commands')
         try {
             this.commandsDir = './commands'
-        } catch (err) {console.log('Ignoring immeninent error.')}
+        } catch (err) { 
+            return
+        }
         fs.readdir(this.commandsDir, (err, files) => {
             count = files.length
             console.log(`Loaded ${count} commands`)
