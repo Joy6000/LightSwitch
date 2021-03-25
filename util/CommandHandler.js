@@ -1,6 +1,7 @@
-const prefix = process.env.PREFIX
+
 const fs = require('fs')
-module.exports = (client, Base) => {
+module.exports = (client, Base, Handler) => {
+    const { prefix, owners } = Handler
 let {
     name = '',
     aliases = [],
@@ -58,23 +59,69 @@ const validatePermissions = (permissions) => {
     }
 }
 
-    let count = 0
-    fs.readdir('./cmds', (err, files) => {
-        if (files.length) {
-            count = files.length
-        }
-    }) 
-    console.log(`Loaded ${count} commands`)
-
     if (typeof requiredPermissions === 'string') requiredPermissions = [requiredPermissions]
     if (requiredPermissions.length) {
             if (typeof requiredPermissions === 'string') requiredPermissions = [requiredPermissions]
             validatePermissions(requiredPermissions)
     }
     client.on('message', message => {
+        const { content, member, guild, channel } = message
         for (const alias of aliases) {
             let thing = alias.toLowerCase() || name.toLowerCase()
             const command = `${prefix}${thing}`
+            if (
+                content.toLowerCase().startsWith(`${command} `) ||
+                content.toLowerCase() === command
+              ) {
+                  console.log(`${member.user.tag} just ran ${command} in ${channel.name}`)
+                  // Check if the member that ran the command has permissions required
+                for (const permission of requiredPermissions) {
+                    if (!member.permissions.has(permission)) {
+                        const permError = permissionError ? permissionError : 'You do not have the sufficient permissions to run this command.'
+                        return message.reply(permError)
+                    }
+                }
+                // Make sure the member has the required roles to use this command
+                for (const Rrole of requiredRoles) {
+                    const role = guild.roles.cache.find(r => r.name === Rrole)
+                    if (!member.roles.cache.has(role)) {
+                        return message.reply('You do not have the required roles needed to use this command.')
+                    }
+                }
+                // Check if the user is blacklisted or not
+                for (const blacklistedUser of blacklistedUsers) {
+                    if (member.id === blacklistedUser) return
+                }
+                // Check if the user is whitelisted, if so let them run the command
+                for (const whitelistedUser of whitelistedUsers) {
+                    if (member.id !== whitelistedUser) return
+                }
+                // Disallow command if run in a dm
+                if (guildOnly && channel.type === 'dm') {
+                    return message.reply('This command can only be ran inside a server.')
+                }
+                // Check if the user is a owner, if so let them run the command
+                for (const owner of owners) {
+                    if (member.id !== owner) return
+                }
+                // Split on any number of spaces 
+                const arguments = content.split(/[ ]+/)
+                // remove first index of the arguments array
+                arguments.shift()
+                // Check if arguments are correct
+                if (
+                    arguments.length < minArgs ||
+                    (maxArgs !== null && arguments.length > maxArgs)
+                  ) {
+                    message.reply(`Incorrect usage. Correct usage looks something like: "${command} ${usage}"`)
+                    return
+                  }
+  
+                  //THIS MUST BE IN ORDER IN THE COMMAND!!             
+                  callback(message, arguments, arguments.join(' '), client)
+
+                  return
+              }
         }
     })
         
